@@ -3,8 +3,8 @@
 Edit this file for each classroom device.
 
 Wi‑Fi:
-  SSID: Altubar Family Wifi
-  PASS: 123424DecoWifi
+  SSID: routerssid
+  PASS: routerwifipassword
 
 Server:
   Raspberry Pi static IP: 192.168.68.58
@@ -22,20 +22,20 @@ IMPORTANT:
 SERVER_BASE_URL = "http://192.168.68.58"   # no https (LAN only)
 DEVICE_ID = 1                               # set to the device id shown in the web UI
 DEVICE_TOKEN = "PASTE_TOKEN_HERE"          # copy from Add Device result page
-ROOM_NAME = "Regulus - Grade 10"           # optional, for local prints
+ROOM_NAME = "G12 - Manulat"           # optional, for local prints
 
 # --------------------
 # Wi‑Fi
 # --------------------
-WIFI_SSID = "Altubar Family Wifi"
-WIFI_PASSWORD = "123424DecoWifi"
+WIFI_SSID = "wifissid"
+WIFI_PASSWORD = "wifipassword"
 
 # Optional: set a static IP on the ESP32 (usually NOT needed if you use router reservation)
 USE_STATIC_IP = False
-STATIC_IP = "192.168.68.51"
+STATIC_IP = "192.168.1.2"
 NETMASK = "255.255.255.0"
-GATEWAY = "192.168.68.1"
-DNS = "192.168.68.1"
+GATEWAY = "192.168.1.1"
+DNS = "192.168.1.1"
 
 # --------------------
 # Hardware Pins
