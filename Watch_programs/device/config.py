@@ -45,16 +45,16 @@ RCWL_OUT_PIN = 8
 
 # RGB LED pins (set any to None if unused)
 # NOTE: Most ESP32 boards need a current-limiting resistor per LED channel (e.g., 220Ω–330Ω).
-LED_R_PIN = 5
-LED_G_PIN = 6
-LED_B_PIN = 7
+LED_R_PIN = 18
+LED_G_PIN = 19
+LED_B_PIN = 21
 
 # If your RGB LED is common-anode, set this True (active LOW). If common-cathode, set False (active HIGH).
 LED_COMMON_ANODE = False
 
 # Active buzzers (recommended to drive via transistor if using 5V buzzers)
-BUZZER1_PIN = 4
-BUZZER2_PIN = 9
+BUZZER1_PIN = 22
+BUZZER2_PIN = 21
 
 # --------------------
 # Sensor tuning / timings
