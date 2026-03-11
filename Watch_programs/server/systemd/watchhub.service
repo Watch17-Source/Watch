@@ -1,0 +1,26 @@
+[Unit]
+Description=WATCH Classroom Alarm Hub (Flask/Waitress)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/WATCH/server
+
+# Allow binding to port 80 without running as root
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+
+Environment=PYTHONUNBUFFERED=1
+
+# If you want to change the port, edit config.py or set WATCH_PORT here
+# Environment=WATCH_PORT=8080
+
+ExecStart=/home/pi/WATCH/server/.venv/bin/python -m waitress --listen=0.0.0.0:80 wsgi:app
+
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

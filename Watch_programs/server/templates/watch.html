@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Watch</h1>
+    <div class="muted">Live device monitor (auto-refreshes).</div>
+  </div>
+  <div class="page-actions">
+    <a class="btn" href="{{ url_for('add_device') }}">Add Device</a>
+  </div>
+</div>
+
+<div class="muted small" id="server-clock">Server time: ...</div>
+
+<div class="device-grid" id="device-grid">
+  {% for d in devices %}
+    <a class="device-card" href="{{ url_for('device_detail', device_id=d.id) }}" data-device-id="{{ d.id }}">
+      <div class="device-top">
+        <div class="device-name">{{ d.name }}</div>
+        <div class="pill {% if d.ui_status == 'Safe' %}safe{% elif d.ui_status == 'Broke' %}broke{% else %}offline{% endif %}">
+          {{ d.ui_status }}
+        </div>
+      </div>
+      <div class="device-meta">
+        <div><span class="k">IP:</span> <span class="v">{{ d.ip }}</span></div>
+        <div><span class="k">Last state:</span> <span class="v">{{ d.last_state or '—' }}</span></div>
+        <div><span class="k">Last seen:</span> <span class="v">{{ d.last_seen or '—' }}</span></div>
+        {% if d.ui_ack_pending %}
+          <div class="warn">Ack sent • waiting for device</div>
+        {% endif %}
+      </div>
+    </a>
+  {% endfor %}
+</div>
+
+<script>
+const POLL_MS = {{ config.WATCH_POLL_MS if config else 2000 }};
+async function refreshDevices() {
+  try {
+    const resp = await fetch("{{ url_for('api_admin_devices') }}", {headers: {"Accept":"application/json"}});
+    const data = await resp.json();
+
+    const clock = document.getElementById("server-clock");
+    clock.textContent = "Server time: " + data.server_hhmm + "  •  epoch " + data.server_epoch;
+
+    const grid = document.getElementById("device-grid");
+    const cards = grid.querySelectorAll("[data-device-id]");
+    const byId = {};
+    for (const d of data.devices) byId[d.id] = d;
+
+    for (const card of cards) {
+      const id = parseInt(card.getAttribute("data-device-id"));
+      const d = byId[id];
+      if (!d) continue;
+
+      const pill = card.querySelector(".pill");
+      pill.textContent = d.ui_status;
+      pill.classList.remove("safe","broke","offline");
+      pill.classList.add(d.ui_status === "Safe" ? "safe" : (d.ui_status === "Broke" ? "broke" : "offline"));
+
+      const meta = card.querySelector(".device-meta");
+      meta.innerHTML = `
+        <div><span class="k">IP:</span> <span class="v">${d.ip}</span></div>
+        <div><span class="k">Last state:</span> <span class="v">${d.last_state || "—"}</span></div>
+        <div><span class="k">Last seen:</span> <span class="v">${d.last_seen || "—"}</span></div>
+        ${d.ui_ack_pending ? `<div class="warn">Ack sent • waiting for device</div>` : ``}
+      `;
+    }
+  } catch (e) {
+    // silent fail; next poll may succeed
+  }
+}
+
+refreshDevices();
+setInterval(refreshDevices, POLL_MS);
+</script>
+{% endblock %}

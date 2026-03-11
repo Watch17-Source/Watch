@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="grid">
+  <div class="card">
+    <h1>WATCH</h1>
+    <p>
+      <strong>Wireless Alarm and Threat-Check Hub for Classrooms</strong> is a LAN-based security system designed to
+      help school guards monitor classrooms at night and respond faster to intrusions.
+    </p>
+
+    <h2>Why this exists</h2>
+    <ul>
+      <li>Repeated school ransacking incidents in previous years</li>
+      <li>Guards need faster room-level visibility without walking room-to-room</li>
+      <li>No internet required — local-only network</li>
+    </ul>
+
+    <h2>How it works</h2>
+    <ol>
+      <li>Each classroom has an ESP32‑S3 + RCWL‑0516 device connected to the local Wi‑Fi/LAN.</li>
+      <li>At curfew (trigger time), devices auto-calibrate (empty-room baseline) and arm.</li>
+      <li>If motion is detected in a room during curfew, the device alarms and reports to this hub.</li>
+      <li>Guards acknowledge the alert in <strong>Watch</strong>; the device stops alarming and pauses for inspection.</li>
+      <li>All alarm sessions are recorded in <strong>Cases</strong>.</li>
+    </ol>
+
+    <p class="muted">
+      Note: RCWL‑0516 is a Doppler motion sensor; WATCH is engineered to reduce false alarms and stabilize detection,
+      but motion sensors cannot perfectly distinguish humans from all other movement.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>System Status</h2>
+    <p class="muted">Go to <strong>Watch</strong> for live device states.</p>
+    <div class="pill-row">
+      <span class="pill safe">Safe</span>
+      <span class="pill broke">Broke</span>
+      <span class="pill offline">Offline</span>
+    </div>
+
+    <hr>
+
+    <h2>Quick links</h2>
+    <div class="actions">
+      <a class="btn" href="{{ url_for('watch') }}">Open Watch</a>
+      <a class="btn" href="{{ url_for('cases') }}">View Cases</a>
+      <a class="btn" href="{{ url_for('add_device') }}">Add a Device</a>
+    </div>
+
+    <hr>
+
+    <h2>Security reminder</h2>
+    <ul>
+      <li>Change default login credentials in <code>server/config.py</code></li>
+      <li>Keep device tokens private (per-device secret)</li>
+      <li>Use static IP reservations to make device identity predictable</li>
+    </ul>
+  </div>
+</div>
+{% endblock %}

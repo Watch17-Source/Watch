@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Cases</h1>
+    <div class="muted">All recorded alarm sessions.</div>
+  </div>
+</div>
+
+<div class="card">
+  {% if cases %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Room</th>
+            <th>Status</th>
+            <th>Started (UTC)</th>
+            <th>Acked (UTC)</th>
+            <th>Ended (UTC)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in cases %}
+          <tr>
+            <td>{{ c.id }}</td>
+            <td>{{ c.device_name }}</td>
+            <td>{{ c.status }}</td>
+            <td>{{ c.started_at }}</td>
+            <td>{{ c.acked_at or '—' }}</td>
+            <td>{{ c.ended_at or '—' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">No cases recorded yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

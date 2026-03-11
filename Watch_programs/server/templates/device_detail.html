@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>{{ dev.name }}</h1>
+    <div class="muted">IP: {{ dev.ip }} • Device ID: {{ dev.id }}</div>
+  </div>
+  <div class="page-actions">
+    <form method="post" action="{{ url_for('device_delete', device_id=dev.id) }}" onsubmit="return confirm('Delete this device?');">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn danger" type="submit">Delete Device</button>
+    </form>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h2>Status</h2>
+    <div class="pill-row">
+      <span class="pill {% if dev.ui_status == 'Safe' %}safe{% elif dev.ui_status == 'Broke' %}broke{% else %}offline{% endif %}">
+        {{ dev.ui_status }}
+      </span>
+      {% if dev.ui_ack_pending %}
+        <span class="pill warnpill">Ack sent • waiting for device</span>
+      {% endif %}
+    </div>
+
+    <div class="kv">
+      <div><span class="k">Last state</span><span class="v">{{ dev.last_state or '—' }}</span></div>
+      <div><span class="k">Last seen (UTC)</span><span class="v">{{ dev.last_seen or '—' }}</span></div>
+      <div><span class="k">Trigger time</span><span class="v">{{ dev.trigger_time }}</span></div>
+      <div><span class="k">Kill time</span><span class="v">{{ dev.kill_time }}</span></div>
+      <div><span class="k">Enabled</span><span class="v">{{ 'Yes' if dev.enabled else 'No' }}</span></div>
+      <div><span class="k">Pause until (UTC)</span><span class="v">{{ dev.pause_until or '—' }}</span></div>
+    </div>
+
+    {% if dev.ui_status == 'Broke' %}
+      <hr>
+      <h3>Alarm controls</h3>
+      <form method="post" action="{{ url_for('device_ack', device_id=dev.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn primary" type="submit">Okay (Acknowledge Alarm)</button>
+        <div class="muted small">Stops device alarm and applies a 1-hour pause.</div>
+      </form>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>Schedule</h2>
+    <p class="muted">Set curfew times per room. Times are based on the Raspberry Pi local time.</p>
+
+    <form method="post" action="{{ url_for('device_update', device_id=dev.id) }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <label>Trigger time (HH:MM)</label>
+      <input name="trigger_time" value="{{ dev.trigger_time }}" required>
+
+      <label>Kill time (HH:MM)</label>
+      <input name="kill_time" value="{{ dev.kill_time }}" required>
+
+      <label class="checkbox">
+        <input type="checkbox" name="enabled" value="1" {% if dev.enabled %}checked{% endif %}>
+        Enabled
+      </label>
+
+      <button class="btn" type="submit">Save</button>
+    </form>
+
+    <hr>
+    <h2>Device Token</h2>
+    <p class="muted">Token is not shown here for safety. If you lose it, delete and re-add the device.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Cases for this room</h2>
+  {% if cases %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Status</th>
+            <th>Started (UTC)</th>
+            <th>Acked (UTC)</th>
+            <th>Ended (UTC)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in cases %}
+          <tr>
+            <td>{{ c.id }}</td>
+            <td>{{ c.status }}</td>
+            <td>{{ c.started_at }}</td>
+            <td>{{ c.acked_at or '—' }}</td>
+            <td>{{ c.ended_at or '—' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="muted">No recorded cases yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

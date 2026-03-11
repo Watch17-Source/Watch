@@ -1,0 +1,401 @@
+:root{
+  --orange: #EE6C29;
+  --jet: #282B2B;
+  --moonstone: #7AA6B3;
+  --bg: #0f1212;
+  --card: #161a1a;
+  --text: #f1f4f4;
+  --muted: #a8b1b1;
+  --border: rgba(255,255,255,0.10);
+}
+
+/*
+  IMPORTANT:
+  We rely on the HTML [hidden] attribute for UI overlays (audio prompt + alarm overlay).
+  In some browsers, author CSS can accidentally override the UA [hidden]{display:none} rule.
+  Enforce the expected behavior so overlays are not "stuck" visible.
+*/
+[hidden]{
+  display: none !important;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
+  background: linear-gradient(180deg, #0b0d0d, var(--bg));
+  color: var(--text);
+}
+
+a{color:inherit; text-decoration:none}
+code{background: rgba(255,255,255,0.06); padding: 0.1rem 0.3rem; border-radius: 6px}
+
+.container{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+.topbar{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(10,12,12,0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 1rem;
+}
+
+.brand{
+  display:flex;
+  align-items:baseline;
+  gap: 0.8rem;
+}
+
+.logo{
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  padding: 0.35rem 0.6rem;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--orange), #ffb347);
+  color: #101010;
+}
+
+.subtitle{
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.nav{
+  display:flex;
+  align-items:center;
+  gap: 0.8rem;
+}
+.nav a{
+  padding: 0.4rem 0.55rem;
+  border-radius: 10px;
+  color: var(--text);
+  border: 1px solid transparent;
+}
+.nav a:hover{
+  border-color: var(--border);
+  background: rgba(255,255,255,0.03);
+}
+.nav .logout{
+  border-color: rgba(238,108,41,0.35);
+}
+
+.footer{
+  border-top: 1px solid var(--border);
+  margin-top: 2.5rem;
+  padding: 1.5rem 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.card{
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.1rem 1.1rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.card.narrow{
+  max-width: 520px;
+  margin: 2rem auto;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 900px){
+  .grid{grid-template-columns: 1fr;}
+}
+
+.page-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+h1{margin:0 0 0.3rem 0}
+h2{margin-top: 1.2rem}
+hr{
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1rem 0;
+}
+
+.muted{color: var(--muted)}
+.small{font-size: 0.9rem}
+.hint{margin-top: 1rem; color: var(--muted); font-size:0.95rem}
+
+.flash-wrap{margin: 1rem 0; display:flex; flex-direction:column; gap: 0.5rem;}
+.flash{
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.6rem 0.75rem;
+}
+.flash.ok{border-color: rgba(122,166,179,0.45)}
+.flash.err{border-color: rgba(238,108,41,0.55)}
+
+label{display:block; margin: 0.65rem 0 0.25rem 0; color: var(--muted)}
+input{
+  width: 100%;
+  padding: 0.65rem 0.7rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(0,0,0,0.35);
+  color: var(--text);
+  outline: none;
+}
+input:focus{border-color: rgba(122,166,179,0.75)}
+
+.checkbox{display:flex; align-items:center; gap: 0.6rem; margin-top: 0.8rem}
+.checkbox input{width:auto}
+
+.row2{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+@media (max-width: 700px){
+  .row2{grid-template-columns: 1fr;}
+}
+
+.btn{
+  display:inline-block;
+  padding: 0.6rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn:hover{background: rgba(255,255,255,0.09)}
+.btn.primary{
+  border-color: rgba(238,108,41,0.55);
+  background: rgba(238,108,41,0.18);
+}
+.btn.danger{
+  border-color: rgba(255,80,80,0.6);
+  background: rgba(255,80,80,0.15);
+}
+.actions{display:flex; flex-wrap:wrap; gap: 0.6rem; margin-top: 0.8rem}
+
+.pill-row{display:flex; flex-wrap:wrap; gap: 0.55rem; margin: 0.6rem 0 0.4rem}
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: 1px solid var(--border);
+}
+.pill.safe{border-color: rgba(122,166,179,0.65); background: rgba(122,166,179,0.15)}
+.pill.broke{border-color: rgba(238,108,41,0.75); background: rgba(238,108,41,0.18)}
+.pill.offline{border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.06)}
+.pill.warnpill{border-color: rgba(255,220,120,0.45); background: rgba(255,220,120,0.12); color: #ffe7b0}
+
+.device-grid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.9rem;
+  margin-top: 0.9rem;
+}
+@media (max-width: 1000px){
+  .device-grid{grid-template-columns: repeat(2, 1fr);}
+}
+@media (max-width: 700px){
+  .device-grid{grid-template-columns: 1fr;}
+}
+
+.device-card{
+  display:block;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  padding: 0.9rem;
+  background: rgba(255,255,255,0.035);
+}
+.device-card:hover{background: rgba(255,255,255,0.06)}
+
+.device-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap: 0.6rem;
+}
+.device-name{font-weight: 900; letter-spacing: 0.01em}
+
+.device-meta{
+  margin-top: 0.6rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+  display:flex;
+  flex-direction:column;
+  gap: 0.25rem;
+}
+.device-meta .k{color: rgba(255,255,255,0.55)}
+.device-meta .v{color: var(--text)}
+.warn{color: #ffe7b0; font-weight: 700; margin-top: 0.35rem}
+
+.kv{
+  margin-top: 0.6rem;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem 1rem;
+}
+.kv .k{color: rgba(255,255,255,0.55); display:block; font-size:0.9rem}
+.kv .v{display:block; font-weight:700}
+
+.table-wrap{overflow:auto; margin-top: 0.6rem}
+table{
+  width:100%;
+  border-collapse: collapse;
+  min-width: 780px;
+}
+th, td{
+  text-align:left;
+  padding: 0.6rem 0.65rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+th{color: rgba(255,255,255,0.75); font-weight: 800}
+
+.tokenbox{
+  margin-top: 0.7rem;
+  border: 1px solid rgba(122,166,179,0.35);
+  background: rgba(122,166,179,0.08);
+  border-radius: 14px;
+  padding: 0.8rem;
+}
+.token{
+  display:block;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  word-break: break-all;
+}
+
+
+/* ------------------------------
+   Global Alarm Prompt + Audio Toast
+   (Always available across pages)
+   ------------------------------ */
+
+.watch-overlay{
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(0,0,0,0.60);
+  z-index: 9999;
+}
+
+.watch-alert-card{
+  width: min(720px, 96vw);
+  border-color: rgba(238,108,41,0.55);
+}
+
+.watch-alert-head{
+  display:flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.watch-alert-title{
+  font-weight: 900;
+  letter-spacing: 0.01em;
+}
+
+.watch-alert-items{
+  display:flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.watch-alert-row{
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 0.75rem;
+  background: rgba(255,255,255,0.03);
+  display:flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.watch-alert-row-top{
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.watch-alert-room{
+  font-weight: 900;
+}
+
+.watch-alert-meta{
+  color: var(--muted);
+  font-size: 0.92rem;
+  display:flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.watch-alert-actions{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+
+.watch-alert-foot{
+  margin-top: 0.85rem;
+}
+
+/* Audio toast (small prompt) */
+.watch-toast{
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 9998;
+  width: min(420px, 92vw);
+}
+
+.watch-toast-card{
+  border-color: rgba(122,166,179,0.45);
+}
+
+.watch-toast-title{
+  font-weight: 900;
+  margin-bottom: 0.35rem;
+}
+
+/* Gentle pulse while alarm is active (avoid harsh flashing) */
+body.watch-flash{
+  animation: watchPulse 1.1s ease-in-out infinite;
+}
+
+@keyframes watchPulse{
+  0%   { box-shadow: inset 0 0 0 rgba(238,108,41,0.00); }
+  50%  { box-shadow: inset 0 0 0 9999px rgba(238,108,41,0.06); }
+  100% { box-shadow: inset 0 0 0 rgba(238,108,41,0.00); }
+}
+

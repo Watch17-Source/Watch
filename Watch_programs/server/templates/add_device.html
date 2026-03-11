@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card narrow">
+  <h1>Add Device</h1>
+  <p class="muted">
+    Add a classroom device by its <strong>static IP</strong> and room name.
+    After adding, the server will generate a <strong>device token</strong> you must copy into the device <code>config.py</code>.
+  </p>
+
+  <form method="post" action="{{ url_for('add_device_post') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <label>Room / Device Name</label>
+    <input name="name" placeholder="Regulus - Grade 10" required>
+
+    <label>Device Static IP</label>
+    <input name="ip" placeholder="192.168.68.51" required>
+
+    <div class="row2">
+      <div>
+        <label>Trigger time (HH:MM)</label>
+        <input name="trigger_time" value="{{ config.DEFAULT_TRIGGER_TIME }}" required>
+      </div>
+      <div>
+        <label>Kill time (HH:MM)</label>
+        <input name="kill_time" value="{{ config.DEFAULT_KILL_TIME }}" required>
+      </div>
+    </div>
+
+    <button class="btn primary" type="submit">Add Device</button>
+  </form>
+</div>
+{% endblock %}

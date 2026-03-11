@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WATCH — Classroom Security Hub</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css', v=config.STATIC_VERSION if config else '1') }}">
+
+  {% if session.get('logged_in') %}
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <script>
+    window.WATCH = {
+      alertPollMs: {{ config.ALERT_POLL_MS if config and config.ALERT_POLL_MS else 1200 }},
+      flashEnabled: {{ 'true' if config and config.ALERT_FLASH_ENABLED else 'false' }},
+      audioPrompt: {{ 'true' if audio_prompt else 'false' }}
+    };
+  </script>
+  <script defer src="{{ url_for('static', filename='alerts.js', v=config.STATIC_VERSION if config else '1') }}"></script>
+  {% endif %}
+
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <div class="logo">WATCH</div>
+        <div class="subtitle">Wireless Alarm and Threat-Check Hub</div>
+      </div>
+      {% if session.get('logged_in') %}
+      <nav class="nav">
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('watch') }}">Watch</a>
+        <a href="{{ url_for('cases') }}">Cases</a>
+        <a href="{{ url_for('add_device') }}">Add Device</a>
+        <a href="{{ url_for('credits') }}">Credits</a>
+        <a class="logout" href="{{ url_for('logout') }}">Logout</a>
+      </nav>
+      {% endif %}
+    </div>
+  </header>
+
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-wrap">
+          {% for category, msg in messages %}
+            <div class="flash {{ category }}">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="muted">WATCH — Local-only classroom monitoring hub • Designed for LAN use (no internet required)</div>
+    </div>
+  </footer>
+
+  {% if session.get('logged_in') %}
+  <!-- Always-on Audio Prompt (shown right after login and/or until sound is enabled) -->
+  <div id="watch-audio-toast" class="watch-toast" hidden>
+    <div class="card watch-toast-card">
+      <div class="watch-toast-title">Enable sound alerts</div>
+      <div class="muted small">To play the ringing sound during intruder alarms, your browser needs a one-time tap.</div>
+      <div class="actions">
+        <button class="btn primary" id="watch-enable-audio" type="button">Enable sound</button>
+        <button class="btn" id="watch-dismiss-audio" type="button">Not now</button>
+      </div>
+      <div class="muted small" id="watch-audio-status"></div>
+    </div>
+  </div>
+
+  <!-- Always-on Alarm Prompt (available on every page while logged in) -->
+  <div id="watch-alert-overlay" class="watch-overlay" hidden>
+    <div class="card watch-alert-card" role="alertdialog" aria-modal="true" aria-labelledby="watch-alert-title">
+      <div class="watch-alert-head">
+        <div class="watch-alert-title" id="watch-alert-title">🚨 Intruder alert</div>
+        <div class="muted small" id="watch-alert-subtitle"></div>
+      </div>
+
+      <div id="watch-alert-items" class="watch-alert-items"></div>
+
+      <div class="muted small watch-alert-foot">
+        When you click <strong>Okay</strong>, the website ringing stops and an acknowledge command is sent to the device.
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card narrow">
+  <h1>Device Added</h1>
+  <p class="muted">Copy this token into the device’s <code>device/config.py</code>:</p>
+
+  <div class="tokenbox">
+    <div class="muted small">Device: <strong>{{ dev.name }}</strong> (ID {{ dev.id }}, IP {{ dev.ip }})</div>
+    <code class="token">{{ dev.token }}</code>
+  </div>
+
+  <div class="actions">
+    <a class="btn" href="{{ url_for('watch') }}">Back to Watch</a>
+    <a class="btn" href="{{ url_for('device_detail', device_id=dev.id) }}">Open Device</a>
+  </div>
+
+  <p class="muted small">
+    For safety, this token will not be shown again in the UI. If you lose it, delete the device and add it again.
+  </p>
+</div>
+{% endblock %}
